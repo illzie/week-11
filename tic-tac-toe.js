@@ -40,11 +40,8 @@ function newGame() {
     O_TURN = false
     gameStatusText.innerHTML = 'Start!'
     gameBoard.innerHTML = ' '
-    buildBoard(tile => {
-        tile.classList.remove(O_CLASS)
-        tile.classList.remove(X_CLASS)
-        tile.removeEventListiner('click', setTile)
-    })
+    buildBoard()
+
     gameOverMessage.classList.remove('show')
 
 }
@@ -81,8 +78,6 @@ function setTile() {
 
     board[r][c] = currentTurn
     this.classList.add(currentTurn)
-
-
 
     isGameOver()
     gameStatus()
@@ -150,31 +145,33 @@ function winningCombos() {
         return true
     }
 
-
 }
 
 function checkTie() {
-    let filledTiles = 0
+    let count = 0;
     for (let r = 0; r < 3; r++) {
-        for (let c = 0; c < 3; c++) {
+        for (c = 0; c < 3; c++) {
             if (board[r][c] != ' ') {
-                filledTiles++
+                count++;
             }
         }
     }
-    if (filledTiles == 9) {
-        return true
-    }
 
+    if (count == 9) {
+        for (let r = 0; r < 3; r++) {
+            for (c = 0; c < 3; c++) {
+                gameOverMessage.classList.add('show')
+                return true
+            }
+        }
+    }
 }
 
 function isGameOver() {
-
     if (checkTie()) {
         gameOver = true
         announceWinner.innerHTML = 'TIE!'
     } else if (winningCombos()) {
-
         gameOver = true
         announceWinner.innerHTML = `${O_TURN ? O_CLASS : X_CLASS} WINS! `
     } else {

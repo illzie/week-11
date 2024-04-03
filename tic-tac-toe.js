@@ -36,13 +36,13 @@ newGame()
 resetBtn.addEventListener('click', newGame)
 
 function newGame() {
-
     O_TURN = false
     gameOver = false
     gameStatusText.innerHTML = 'Start!'
     gameBoard.innerHTML = ' '
-    buildBoard()
     boardHover()
+    buildBoard()
+
     gameOverMessage.classList.remove('show')
 
 }

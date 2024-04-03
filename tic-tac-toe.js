@@ -38,10 +38,11 @@ resetBtn.addEventListener('click', newGame)
 function newGame() {
 
     O_TURN = false
+    gameOver = false
     gameStatusText.innerHTML = 'Start!'
     gameBoard.innerHTML = ' '
     buildBoard()
-
+    boardHover()
     gameOverMessage.classList.remove('show')
 
 }
@@ -81,12 +82,11 @@ function setTile() {
 
     isGameOver()
     gameStatus()
-    boardHover()
 }
 
 function gameStatus() {
     if (!gameOver) {
-        gameStatusText.innerHTML = `${O_TURN ? X_CLASS : O_CLASS}'s Turn `
+        gameStatusText.innerHTML = `${O_TURN ? O_CLASS : X_CLASS}'s Turn `
 
     } else {
         gameStatusText.innerHTML = 'Game Over!'
@@ -96,7 +96,6 @@ function swapTurn() {
     O_TURN = !O_TURN
 }
 function winningCombos() {
-
     // Checks Horizontal 
     for (let r = 0; r < 3; r++) {
         if (board[r][0] == board[r][1] && board[r][1] == board[r][2] && board[r][0] != ' ') {
@@ -104,7 +103,6 @@ function winningCombos() {
                 let tile = document.getElementById(r.toString() + '-' + i.toString())
                 tile.classList.add('winner')
             }
-
             gameOverMessage.classList.add('show')
             return true
         }
@@ -116,7 +114,6 @@ function winningCombos() {
                 let tile = document.getElementById(i.toString() + '-' + c.toString())
                 tile.classList.add('winner')
             }
-
             gameOverMessage.classList.add('show')
             return true
         }
@@ -127,10 +124,8 @@ function winningCombos() {
             let tile = document.getElementById(i.toString() + '-' + i.toString())
             tile.classList.add('winner')
         }
-
         gameOverMessage.classList.add('show')
         return true
-
     }
     // Checks R2L Diagonal
     if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' ') {
@@ -140,7 +135,6 @@ function winningCombos() {
         tile.classList.add('winner')
         tile = document.getElementById('2-0')
         tile.classList.add('winner')
-
         gameOverMessage.classList.add('show')
         return true
     }
@@ -168,14 +162,15 @@ function checkTie() {
 }
 
 function isGameOver() {
-    if (checkTie()) {
-        gameOver = true
-        announceWinner.innerHTML = 'TIE!'
-    } else if (winningCombos()) {
+    if (winningCombos()) {
         gameOver = true
         announceWinner.innerHTML = `${O_TURN ? O_CLASS : X_CLASS} WINS! `
+    } else if (checkTie()) {
+        gameOver = true
+        announceWinner.innerHTML = 'TIE!'
     } else {
         swapTurn()
+        boardHover()
     }
 
 }
